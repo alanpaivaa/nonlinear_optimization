@@ -1,8 +1,9 @@
 import numpy as np
+from unconstrained_optimization.line_search import BacktrackingLineSearch
 
 
 class AbstractDescent:
-    def __init__(self, f, line_search, epsilon=1e-5):
+    def __init__(self, f, line_search, epsilon):
         self.f = f
         self.line_search = line_search
         self.epsilon = epsilon
@@ -36,7 +37,7 @@ STEEPEST_DESCENT_NORM_L1 = 'st_norm_l1'
 
 
 class SteepestDescent(AbstractDescent):
-    def __init__(self, f, line_search, p, norm, epsilon=1e-5):
+    def __init__(self, f, line_search, p, norm, epsilon):
         super().__init__(f=f, line_search=line_search, epsilon=epsilon)
         self.norm = norm
         self.p = p
@@ -69,3 +70,31 @@ class SteepestDescent(AbstractDescent):
             return self.get_delta_x_l1_norm(x)
         else:
             raise Exception("Invalid norm")
+
+
+class NewtonStep(AbstractDescent):
+    def __init__(self, f, alpha, beta, epsilon):
+        line_search = BacktrackingLineSearch(f, alpha, beta)
+        super().__init__(f, line_search, epsilon)
+
+    def get_delta_x(self, x):
+        grad = self.f.gradient(x).reshape((x.shape[0], -1))
+        return -np.linalg.inv(self.f.hessian(x)) @ grad
+
+    def get_decrement(self, x):
+        grad = self.f.gradient(x).reshape((x.shape[0], -1))
+        lambda2 = grad.T @ np.linalg.inv(self.f.hessian(x)) @ grad
+        return lambda2.item()
+
+    def optimize(self, x):
+        i = 0
+        min_x = x
+        while True:
+            decrement = self.get_decrement(min_x)
+            if decrement < self.epsilon:
+                return i, min_x
+            i += 1
+            delta_x = self.get_delta_x(min_x)
+            delta_x = delta_x.T[0]
+            t = self.line_search(min_x, delta_x)
+            min_x = min_x + t * delta_x
