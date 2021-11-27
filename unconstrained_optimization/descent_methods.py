@@ -16,16 +16,18 @@ class AbstractDescent:
         i = 0
         min_x = x
         errors = []
+        path = [min_x]
         while not converged:
             delta_x = self.get_delta_x(min_x)
             t = self.line_search(min_x, delta_x)
             min_x = min_x + t * delta_x
+            path.append(min_x)
             error = np.linalg.norm(delta_x, ord=2)
             errors.append(error)
             converged = error < self.epsilon
             i += 1
             # print(i, min_x, self.f(min_x))
-        return i, min_x, np.array(errors)
+        return i, min_x, np.array(path), np.array(errors)
 
 
 class GradientDescent(AbstractDescent):
@@ -93,13 +95,15 @@ class NewtonStep(AbstractDescent):
         i = 0
         min_x = x
         errors = []
+        path = [min_x]
         while True:
             decrement = self.get_decrement(min_x)
             errors.append(decrement)
             if decrement < self.epsilon:
-                return i, min_x, np.array(errors)
+                return i, min_x, np.array(path), np.array(errors)
             i += 1
             delta_x = self.get_delta_x(min_x)
             delta_x = delta_x.T[0]
             t = self.line_search(min_x, delta_x)
             min_x = min_x + t * delta_x
+            path.append(min_x)

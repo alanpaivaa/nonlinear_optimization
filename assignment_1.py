@@ -4,14 +4,15 @@ from unconstrained_optimization.line_search import ConstantLineSearch, Backtrack
 from unconstrained_optimization.descent_methods import GradientDescent
 from unconstrained_optimization.descent_methods import SteepestDescent, STEEPEST_DESCENT_NORM_EUCLIDEAN, STEEPEST_DESCENT_NORM_QUADRATIC, STEEPEST_DESCENT_NORM_L1
 from unconstrained_optimization.descent_methods import NewtonStep
-from unconstrained_optimization.plot_helper import plot_error_curve
+from unconstrained_optimization.plot_helper import plot_error_curve, plot_levels
 
 # TODO: Remove seed
 # TODO: Grid Search for Hyper params
 
 # Define starting point for the optimization
 np.random.seed(11)
-x0 = np.random.uniform(low=-4, high=0, size=(2,))
+# x0 = np.random.uniform(low=-4, high=0, size=(2,))
+x0 = np.array([1, 1])
 epsilon = 1e-7
 
 # Define function
@@ -19,8 +20,8 @@ f = Function()
 
 # Define line search method
 # line_search = ConstantLineSearch(t=0.01)
-line_search = BacktrackingLineSearch(f=f, alpha=0.3, beta=0.7)
-# line_search = ExactLineSearch(f=f)
+# line_search = BacktrackingLineSearch(f=f, alpha=0.3, beta=0.7)
+line_search = ExactLineSearch(f=f)
 
 # Gradient Descent
 # optimizer = GradientDescent(f=f, line_search=line_search, epsilon=epsilon)
@@ -35,7 +36,7 @@ line_search = BacktrackingLineSearch(f=f, alpha=0.3, beta=0.7)
 optimizer = NewtonStep(f=f, alpha=0.1, beta=0.7, epsilon=epsilon)
 
 # Optimization
-iterations, x_min, errors = optimizer.optimize(x0)
+iterations, x_min, path, errors = optimizer.optimize(x0)
 
 # Print results
 print("Número de Iterações: %d" % iterations)
@@ -44,5 +45,8 @@ print("f(x*) = %.10f" % f(x_min))
 
 # Plot error curve
 plot_error_curve(errors=errors)
+
+# Plot levels
+plot_levels(f, path)
 
 print("Done!")

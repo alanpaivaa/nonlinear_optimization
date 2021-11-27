@@ -35,3 +35,26 @@ def plot_error_curve(errors):
     ax.plot(k, errors, marker="o", markersize=5)
 
     plt.show()
+
+
+def plot_levels(f, path):
+    x_space = np.linspace(-1.5, 1.3, 100)
+    y_space = np.linspace(-1.5, 1.2, 100)
+    X, Y = np.meshgrid(x_space, y_space)
+
+    Z = list()
+    for x, y in zip(X, Y):
+        row = list()
+        for i in range(len(x)):
+            row.append(f(np.array([x[i], y[i]])))
+        Z.append(row)
+    Z = np.array(Z)
+
+    fig, ax = plt.subplots(1, 1)
+    cp = ax.contourf(X, Y, Z, levels=25)
+    fig.colorbar(cp)
+    ax.set_title('Curvas de Nível')
+    ax.set_xlabel('x1')
+    ax.set_ylabel('x2')
+    ax.plot(path[:, 0], path[:, 1], color='white', marker="o", markersize=5)
+    plt.show()
