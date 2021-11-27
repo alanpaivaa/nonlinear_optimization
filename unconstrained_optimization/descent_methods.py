@@ -32,6 +32,7 @@ class GradientDescent(AbstractDescent):
 # Steepest Descent Norm types
 STEEPEST_DESCENT_NORM_EUCLIDEAN = 'st_norm_euclidean'
 STEEPEST_DESCENT_NORM_QUADRATIC = 'st_norm_quadratic'
+STEEPEST_DESCENT_NORM_L1 = 'st_norm_l1'
 
 
 class SteepestDescent(AbstractDescent):
@@ -46,10 +47,25 @@ class SteepestDescent(AbstractDescent):
     def get_delta_x_quadratic_norm(self, x):
         return -np.linalg.inv(self.p) @ self.f.gradient(x)
 
+    def get_delta_x_l1_norm(self, x):
+        grad = self.f.gradient(x)
+
+        # Get the ith index
+        inf_norm = np.linalg.norm(grad, ord=np.inf)
+        i = np.argwhere(np.abs(grad) == inf_norm).item()
+
+        # Get the standard basis vector
+        e_i = np.zeros(x.shape[0])
+        e_i[i] = 1
+
+        return -grad[i] * e_i
+
     def get_delta_x(self, x):
         if self.norm == STEEPEST_DESCENT_NORM_EUCLIDEAN:
             return self.get_delta_x_euclidean_norm(x)
         elif self.norm == STEEPEST_DESCENT_NORM_QUADRATIC:
             return self.get_delta_x_quadratic_norm(x)
+        elif self.norm == STEEPEST_DESCENT_NORM_L1:
+            return self.get_delta_x_l1_norm(x)
         else:
             raise Exception("Invalid norm")
