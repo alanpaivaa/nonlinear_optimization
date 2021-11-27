@@ -6,7 +6,7 @@ class Function:
         return self.e_x1_3x2_01(x) + self.e_x1_2x2_01(x) + self.e_x1_02(x)
 
     def gradient(self, x):
-        return np.array([self.der_x1(x), self.der_x2(x)]).reshape(1, 2)
+        return np.array([self.der_x1(x), self.der_x2(x)])
 
     def hessian(self, x):
         return np.array([
