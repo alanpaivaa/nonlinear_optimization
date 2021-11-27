@@ -12,7 +12,7 @@ class AbstractDescent:
 
 
 class GradientDescent(AbstractDescent):
-    def __call__(self, x):
+    def optimize(self, x):
         converged = False
         i = 0
         min_x = x
