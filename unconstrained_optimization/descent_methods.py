@@ -89,7 +89,7 @@ class NewtonStep(AbstractDescent):
     def get_decrement(self, x):
         grad = self.f.gradient(x).reshape((x.shape[0], -1))
         lambda2 = grad.T @ np.linalg.inv(self.f.hessian(x)) @ grad
-        return lambda2.item()
+        return lambda2.item() / 2
 
     def optimize(self, x):
         i = 0
