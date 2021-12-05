@@ -6,6 +6,10 @@ class Function:
         return np.sum(x * np.log(x))
 
     @staticmethod
+    def is_in_domain(x):
+        return np.all(x > 0)
+
+    @staticmethod
     def gradient(x):
         return 1 + np.log(x)
 
