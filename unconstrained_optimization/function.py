@@ -10,8 +10,8 @@ class Function:
 
     def hessian(self, x):
         return np.array([
-            [self.der2_x1_x1(x), self.der2_x2_x1(x)],
-            [self.der2_x1_x2(x), self.der2_x2_x2(x)]
+            [self.der2_x1_x1(x), self.der2_x1_x2(x)],
+            [self.der2_x2_x1(x), self.der2_x2_x2(x)]
         ])
 
     @staticmethod

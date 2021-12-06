@@ -22,14 +22,15 @@ def plot_surface(f):
     plt.show()
 
 
-def plot_error_curve(errors):
+def plot_error_curve(errors, title=None):
     k = np.arange(1, len(errors) + 1)
     ax = plt.figure().gca()
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax.set_yscale('log')
     ax.grid()
 
-    plt.title("Curva de erros")
+    if title is not None:
+        plt.title(title)
     plt.xlabel("k")
     plt.ylabel("Erro")
     ax.plot(k, errors, marker="o", markersize=5)
@@ -37,7 +38,7 @@ def plot_error_curve(errors):
     plt.show()
 
 
-def plot_levels(f, path):
+def plot_levels(f, path, title=None):
     x_space = np.linspace(-1.5, 1.3, 100)
     y_space = np.linspace(-1.5, 1.2, 100)
     X, Y = np.meshgrid(x_space, y_space)
@@ -53,7 +54,8 @@ def plot_levels(f, path):
     fig, ax = plt.subplots(1, 1)
     cp = ax.contourf(X, Y, Z, levels=25)
     fig.colorbar(cp)
-    ax.set_title('Curvas de Nível')
+    if title is not None:
+        ax.set_title(title)
     ax.set_xlabel('x1')
     ax.set_ylabel('x2')
     ax.plot(path[:, 0], path[:, 1], color='white', marker="o", markersize=5)

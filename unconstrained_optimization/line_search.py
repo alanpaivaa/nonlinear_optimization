@@ -1,20 +1,12 @@
 import numpy as np
 
 
-class ConstantLineSearch:
-    def __init__(self, t):
-        self.t = t
-
-    def __call__(self, *args):
-        return self.t
-
-
 class ExactLineSearch:
     def __init__(self, f):
         self.f = f
 
     def __call__(self, x, delta_x):
-        lin_space = np.linspace(0, 1, 1000)
+        lin_space = np.linspace(0, 1, 100000)
         res = np.array([self.f(x + s * delta_x) for s in lin_space])
         min_arg = np.argmin(res)
         return lin_space[min_arg]
