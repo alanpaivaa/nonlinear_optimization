@@ -106,7 +106,8 @@ class InfeasibleStartNewtonStep:
         r_dual, r_primal = r
         norm_dual = np.linalg.norm(r_dual, ord=2)
         norm_primal = np.linalg.norm(r_primal, ord=2)
-        return np.array([norm_dual, norm_primal])
+        norms = np.array([norm_dual, norm_primal])
+        return np.linalg.norm(norms, ord=2)
 
     def get_t(self, x, delta_x, nu, delta_nu):
         t = 1.0
@@ -154,5 +155,5 @@ class InfeasibleStartNewtonStep:
             is_feasible = np.allclose(self.a @ x_min, self.b)
 
             # Finish when point is feasible and norm of r is less than the tolerance
-            if is_feasible and np.all(error <= self.epsilon):
+            if is_feasible and error <= self.epsilon:
                 return i, x_min, np.array(path), np.array(errors)
