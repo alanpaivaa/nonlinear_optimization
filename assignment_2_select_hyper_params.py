@@ -27,10 +27,15 @@ def select_backtracking_hyper_parameters(f, x_start, make_optimizer):
 
 
 def main():
+    # Set the seed to have deterministic approach
+    np.random.seed(11)
+
+    # Define function
     f = Function()
 
-    a = np.load('constrained_optimization/a.npy')
-    x_hat = np.load('constrained_optimization/x_hat.npy')
+    # Generate problem
+    a = np.random.rand(30, 100)
+    x_hat = np.random.uniform(size=100)
     b = a @ x_hat
 
     # Feasible starting point
@@ -57,7 +62,7 @@ def main():
             b=b,
             alpha=alpha,
             beta=beta,
-            epsilon=1e-11
+            epsilon=1e-13
         )
     )
 

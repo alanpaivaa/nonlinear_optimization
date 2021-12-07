@@ -6,12 +6,17 @@ from constrained_optimization.plot_helper import plot_error_curve
 
 
 def main():
+    # Set the seed to have deterministic approach
+    np.random.seed(11)
+
     # Load a and x_hat from file
-    a = np.load('constrained_optimization/a.npy')
-    x_hat = np.load('constrained_optimization/x_hat.npy')
+    a = np.random.rand(30, 100)
+
+    x_hat = np.random.uniform(size=100)
     b = a @ x_hat
 
-    print("A has full rank: %s" % (np.linalg.matrix_rank(a) == a.shape[0]))
+    is_full_rank = np.linalg.matrix_rank(a) == a.shape[0]
+    assert is_full_rank, "Matrix a is not full rank"
 
     # Define function
     f = Function()
@@ -29,17 +34,17 @@ def main():
     print("Tempo de execução: %d ms" % ((end_time - start_time) * 1000))
 
     # Plot error curve
-    plot_error_curve(errors=errors)
+    plot_error_curve(errors=errors, title="Ponto Inicial Factível")
 
     # Infeasible starting point optimization
-    optimizer = InfeasibleStartNewtonStep(f=f, a=a, b=b, alpha=0.1, beta=0.594382, epsilon=1e-11)
+    optimizer = InfeasibleStartNewtonStep(f=f, a=a, b=b, alpha=0.1, beta=0.612360, epsilon=1e-13)
     start_time = time.time()
     iterations, x_min_infeasible, _, errors = optimizer.optimize(np.ones(x_hat.shape) * 100)
     end_time = time.time()
 
     # Plot error curve
-    plot_error_curve(errors=errors)
-    
+    plot_error_curve(errors=errors, title="Ponto Inicial Não Factível")
+
     # Print results
     print("\n----- Infeasible Starting Point -----")
     print("Número de Iterações: %d" % iterations)
