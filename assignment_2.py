@@ -22,7 +22,7 @@ def main():
     f = Function()
 
     # Feasible starting point optimization
-    optimizer = FeasibleStartNewtonStep(f=f, a=a, b=b, alpha=0.1, beta=0.1, epsilon=1e-20)
+    optimizer = FeasibleStartNewtonStep(f=f, a=a, b=b, alpha=0.1, beta=0.1, epsilon=1e-13)
     start_time = time.time()
     iterations, x_min_feasible, _, errors = optimizer.optimize(x_hat)
     end_time = time.time()
@@ -43,7 +43,7 @@ def main():
     end_time = time.time()
 
     # Plot error curve
-    plot_error_curve(errors=errors, title="Ponto Inicial Não Factível")
+    plot_error_curve(errors=errors, title="Ponto Inicial Não Factível (100)")
 
     # Print results
     print("\n----- Infeasible Starting Point -----")
